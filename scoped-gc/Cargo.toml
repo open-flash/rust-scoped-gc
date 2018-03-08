@@ -1,0 +1,10 @@
+[package]
+name = "scoped-gc"
+version = "0.1.0"
+authors = ["Charles Samborski <demurgos@demurgos.net>"]
+
+[lib]
+name = "scoped_gc"
+path = "src/lib.rs"
+
+[dependencies]
