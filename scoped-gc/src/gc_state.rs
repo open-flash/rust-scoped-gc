@@ -32,7 +32,6 @@ impl<'gc> GcState<'gc> {
     }));
     self.allocated_bytes += size_of::<GcBox<T>>();
     // We know that `gc_box` is not null so we can use `new_unchecked`
-    self.allocated_bytes += size_of::<GcBox<T>>();
     let box_ptr: NonNull<GcBox<T>> = unsafe { NonNull::new_unchecked(gc_box_ptr) };
     self.boxes = Some(box_ptr);
     Ok(unsafe { NonNull::new_unchecked(gc_box_ptr) })
@@ -75,7 +74,7 @@ impl<'gc> GcState<'gc> {
   }
 }
 
-impl<'gc> Drop for GcState<'gc> {
+unsafe impl<#[may_dangle] 'gc> Drop for GcState<'gc> {
   fn drop(&mut self) {
     let mut cur_box = self.boxes;
     while let Some(gc_box_ptr) = cur_box {

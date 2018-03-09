@@ -45,6 +45,12 @@ impl<'a> Trace for CircularNamedObject<'a> {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #[test]
+fn test_gc_simple() {
+  let scope: GcScope = GcScope::new();
+  scope.alloc(String::from("foo")).unwrap();
+}
+
+#[test]
 fn test_gc() {
   let scope: GcScope = GcScope::new();
   let n1: Gc<NamedObject>;
