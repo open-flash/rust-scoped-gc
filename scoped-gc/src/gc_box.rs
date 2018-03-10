@@ -2,16 +2,26 @@ use ::std::cell::Cell;
 use ::std::ptr::NonNull;
 use trace::Trace;
 
-// Private: keeps track of the roots and marked state
+/// Internal struct containing the values allocated by the garbage collector, with their metadata.
+///
+/// This struct is heap-allocated during `GcScope::alloc`.
 #[derive(Debug)]
-pub struct GcBox<'gc, T: Trace + ? Sized + 'gc> {
-  // 8 bytes
-  pub roots: Cell<usize>,
-  // 1 byte
-  pub marked: Cell<bool>,
-  // 16 bytes
-  pub next: Option<NonNull<GcBox<'gc, Trace>>>,
-  pub value: T,
+pub(crate) struct GcBox<'gc, T: Trace + ? Sized + 'gc> {
+  /// A counter for the `Gc` pointers or `GcRefMut` acting as roots for this value.
+  ///
+  /// Boxes with a non-zero root count act as starting points for the "mark" phase of the
+  /// garbage collector.
+  pub(crate) roots: Cell<usize>,
+
+  /// A boolean used during the "mark" phase of the garbage-collection to signal that this box is
+  /// still reachable.
+  pub(crate) marked: Cell<bool>,
+
+  /// A fat pointer (trait object) to the next `GcBox` if any.
+  pub(crate) next: Option<NonNull<GcBox<'gc, Trace>>>,
+
+  /// The value the user allocated.
+  pub(crate) value: T,
 }
 
 impl<'gc, T: Trace + ? Sized + 'gc> GcBox<'gc, T> {

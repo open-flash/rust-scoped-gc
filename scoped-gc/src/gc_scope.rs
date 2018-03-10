@@ -1,9 +1,14 @@
-use ::std::cell::{Cell, RefCell};
-use gc_alloc_err::GcAllocErr;
+use ::std::cell::RefCell;
 use gc::Gc;
+use gc_alloc_err::GcAllocErr;
 use gc_state::GcState;
 use trace::Trace;
 
+/// Defines a scope for garbage collection.
+///
+/// It lets you allocate garbage-collected values. They can have cycles. Their reachability is
+/// tracked so they can be deallocated once unreachable.
+/// All the values are deallocated once the scope is dropped.
 #[derive(Debug)]
 pub struct GcScope<'gc> {
   state: RefCell<GcState<'gc>>,
@@ -19,7 +24,7 @@ impl<'gc> GcScope<'gc> {
     unsafe { value.unroot() }
     self.state.borrow_mut()
       .alloc(value)
-      .map(|ptr| Gc { ptr, rooted: Cell::new(true) })
+      .map(|ptr| Gc::new(ptr))
   }
 
   pub fn collect_garbage(&self) {

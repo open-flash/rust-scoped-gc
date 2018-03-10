@@ -62,6 +62,6 @@ mod test;
 
 pub use gc::Gc;
 pub use gc_alloc_err::GcAllocErr;
-pub use gc_ref_cell::GcRefCell;
+pub use gc_ref_cell::{GcRef, GcRefCell, GcRefMut};
 pub use gc_scope::GcScope;
 pub use trace::Trace;

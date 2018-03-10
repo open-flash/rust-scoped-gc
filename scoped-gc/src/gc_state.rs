@@ -6,15 +6,15 @@ use gc_box::GcBox;
 use trace::Trace;
 
 #[derive(Debug)]
-pub struct GcState<'gc> {
-  pub allocated_bytes: usize,
+pub(crate) struct GcState<'gc> {
+  pub(crate) allocated_bytes: usize,
   //  threshold: usize,
   // Linked-list of boxes
-  pub boxes: Option<NonNull<GcBox<'gc, Trace>>>,
+  pub(crate) boxes: Option<NonNull<GcBox<'gc, Trace>>>,
 }
 
 impl<'gc> GcState<'gc> {
-  pub fn new() -> GcState<'gc> {
+  pub(crate) fn new() -> GcState<'gc> {
     GcState {
       allocated_bytes: 0,
       boxes: None,
@@ -22,7 +22,7 @@ impl<'gc> GcState<'gc> {
   }
 
   // Allocates GC-managed memory for T
-  pub fn alloc<T: Trace + 'gc>(&mut self, value: T) -> Result<NonNull<GcBox<'gc, T>>, GcAllocErr> {
+  pub(crate) fn alloc<T: Trace + 'gc>(&mut self, value: T) -> Result<NonNull<GcBox<'gc, T>>, GcAllocErr> {
     // into_raw -> mem::forget, so we need to make sure we deallocate it ourselve
     let gc_box_ptr: *mut GcBox<T> = Box::into_raw(Box::new(GcBox {
       roots: Cell::new(1),
@@ -37,7 +37,7 @@ impl<'gc> GcState<'gc> {
     Ok(unsafe { NonNull::new_unchecked(gc_box_ptr) })
   }
 
-  pub fn collect_garbage(&mut self) {
+  pub(crate) fn collect_garbage(&mut self) {
     {
       // Mark
       let mut next_gc_box_ptr = self.boxes;

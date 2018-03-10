@@ -2,6 +2,7 @@ use ::std::cell::{Cell, Ref, RefCell, RefMut};
 use ::std::ops::{Deref, DerefMut};
 use super::trace::Trace;
 
+/// A `RefCell` wrapper compatible with garbage-collection.
 #[derive(Debug)]
 pub struct GcRefCell<T: Trace> {
   rooted: Cell<bool>,
