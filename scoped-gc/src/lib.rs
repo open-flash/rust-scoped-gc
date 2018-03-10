@@ -54,7 +54,6 @@ mod gc_alloc_err;
 mod gc_box;
 mod gc_ref_cell;
 mod gc_scope;
-mod gc_state;
 mod trace;
 
 #[cfg(test)]
