@@ -2,8 +2,11 @@
 name = "scoped-gc"
 version = "0.1.0"
 authors = ["Charles Samborski <demurgos@demurgos.net>"]
+description = "Derive plugin for the `scoped-gc` crate"
 repository = "https://github.com/open-flash/rust-scoped-gc"
 readme = "../README.md"
+license = "AGPL-3.0-or-later"
+license-file = "../LICENSE.md"
 
 [lib]
 name = "scoped_gc"
