@@ -41,6 +41,26 @@ unsafe impl<'a> Trace for CircularNamedObject<'a> {
     self.other.unroot();
   }
 }
+#[derive(Debug)]
+pub struct TreeNode<'a> {
+  pub parent: Option<Gc<'a, GcRefCell<TreeNode<'a>>>>,
+  pub children: Vec<Gc<'a, GcRefCell<TreeNode<'a>>>>,
+}
+
+unsafe impl<'a> Trace for TreeNode<'a> {
+  unsafe fn mark(&self) {
+    self.parent.mark();
+    self.children.mark();
+  }
+  unsafe fn root(&self) {
+    self.parent.root();
+    self.children.root();
+  }
+  unsafe fn unroot(&self) {
+    self.parent.unroot();
+    self.children.unroot();
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -78,4 +98,19 @@ fn test_gc_circular() {
   let n2 = scope.alloc(GcRefCell::new(CircularNamedObject { name: String::from("n2"), other: None })).unwrap();
   n1.borrow_mut().other = Some(Gc::clone(&n2));
   n2.borrow_mut().other = Some(Gc::clone(&n1));
+}
+
+#[test]
+fn test_gc_tree() {
+  let scope: GcScope = GcScope::new();
+  // Create nodes
+  let root = scope.alloc(GcRefCell::new(TreeNode { parent: None, children: Vec::new() })).unwrap();
+  let child1 = scope.alloc(GcRefCell::new(TreeNode { parent: None, children: Vec::new() })).unwrap();
+  let child2 = scope.alloc(GcRefCell::new(TreeNode { parent: None, children: Vec::new() })).unwrap();
+  // Add first child
+  root.borrow_mut().children.push(Gc::clone(&child1));
+  child1.borrow_mut().parent = Some(Gc::clone(&root));
+  // Add second child
+  root.borrow_mut().children.push(Gc::clone(&child2));
+  child2.borrow_mut().parent = Some(Gc::clone(&root));
 }

@@ -85,10 +85,36 @@ unsafe impl<K: Eq + ::std::hash::Hash + Trace, V: Trace> Trace for ::std::collec
   }
 
   unsafe fn root(&self) {
-    unimplemented!()
+    for (k, v) in self.iter() {
+      k.root();
+      v.root();
+    }
   }
 
   unsafe fn unroot(&self) {
-    unimplemented!()
+    for (k, v) in self.iter() {
+      k.unroot();
+      v.unroot();
+    }
+  }
+}
+
+unsafe impl<T: Trace> Trace for ::std::vec::Vec<T> {
+  unsafe fn mark(&self) {
+    for item in self.iter() {
+      item.mark();
+    }
+  }
+
+  unsafe fn root(&self) {
+    for item in self.iter() {
+      item.root();
+    }
+  }
+
+  unsafe fn unroot(&self) {
+    for item in self.iter() {
+      item.unroot();
+    }
   }
 }
