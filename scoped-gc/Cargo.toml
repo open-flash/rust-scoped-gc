@@ -2,6 +2,8 @@
 name = "scoped-gc"
 version = "0.1.0"
 authors = ["Charles Samborski <demurgos@demurgos.net>"]
+repository = "https://github.com/open-flash/rust-scoped-gc"
+readme = "../README.md"
 
 [lib]
 name = "scoped_gc"
