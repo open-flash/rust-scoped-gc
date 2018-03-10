@@ -55,6 +55,7 @@ macro_rules! unsafe_empty_trace {
 }
 
 unsafe_empty_trace!(());
+unsafe_empty_trace!(bool);
 unsafe_empty_trace!(u8);
 unsafe_empty_trace!(u16);
 unsafe_empty_trace!(u32);
