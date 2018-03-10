@@ -6,7 +6,6 @@ description = "Derive plugin for the `scoped-gc` crate"
 repository = "https://github.com/open-flash/rust-scoped-gc"
 readme = "../README.md"
 license = "AGPL-3.0"
-license-file = "../LICENSE.md"
 
 [lib]
 name = "scoped_gc"
