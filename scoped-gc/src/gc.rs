@@ -20,19 +20,19 @@ impl<'gc, T: Trace + 'gc> GcBoxPtr<'gc, T> for Gc<'gc, T> {
   }
 }
 
-impl<'gc, T: Trace> Trace for Gc<'gc, T> {
-  fn trace(&self) {
+unsafe impl<'gc, T: Trace> Trace for Gc<'gc, T> {
+  unsafe fn mark(&self) {
     self.inner().mark_box();
   }
 
-  fn root(&self) {
-    assert!(!self.rooted.get());
+  unsafe fn root(&self) {
+    debug_assert!(!self.rooted.get());
     self.inner().inc_roots();
     self.rooted.set(true);
   }
 
-  fn unroot(&self) {
-    assert!(self.rooted.get());
+  unsafe fn unroot(&self) {
+    debug_assert!(self.rooted.get());
     self.inner().dec_roots();
     self.rooted.set(false);
   }

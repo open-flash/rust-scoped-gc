@@ -3,7 +3,6 @@
 
 /// This module lets you create garbage-collected scopes
 ///
-/// TODO: compile-fail tests
 /// ```compile_fail
 /// use scoped_gc::{Gc, GcScope, Trace};
 ///

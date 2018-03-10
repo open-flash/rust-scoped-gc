@@ -18,7 +18,7 @@ impl<'gc, T: Trace + ? Sized + 'gc> GcBox<'gc, T> {
   pub fn mark_box(&self) {
     if !self.marked.get() {
       self.marked.set(true);
-      self.value.trace()
+      unsafe { self.value.mark() }
     }
   }
 

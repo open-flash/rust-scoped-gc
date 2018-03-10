@@ -24,23 +24,23 @@ impl<T: Trace> GcRefCell<T> {
     // Root the content of the cell for the duration of the mutable borrow, this will be restored
     // once `GcRefMut` is dropped.
     if !self.rooted.get() {
-      self.ref_cell.borrow().root();
+      unsafe { self.ref_cell.borrow().root(); }
     }
     GcRefMut { rooted: &self.rooted, _ref: self.ref_cell.borrow_mut() }
   }
 }
 
-impl<T: Trace> Trace for GcRefCell<T> {
-  fn trace(&self) {
+unsafe impl<T: Trace> Trace for GcRefCell<T> {
+  unsafe fn mark(&self) {
     // If we can't borrow, it means that there is an active RefMut and the value is rooted
     // (no need to trace)
     match self.ref_cell.try_borrow() {
-      Ok(ref value) => value.trace(),
+      Ok(ref value) => value.mark(),
       Err(_) => (),
     }
   }
 
-  fn root(&self) {
+  unsafe fn root(&self) {
     assert!(!self.rooted.get());
     self.rooted.set(true);
     match self.ref_cell.try_borrow() {
@@ -49,7 +49,7 @@ impl<T: Trace> Trace for GcRefCell<T> {
     }
   }
 
-  fn unroot(&self) {
+  unsafe fn unroot(&self) {
     assert!(self.rooted.get());
     self.rooted.set(false);
     match self.ref_cell.try_borrow() {
@@ -94,7 +94,7 @@ impl<'a, T: Trace + 'a> Drop for GcRefMut<'a, T> {
   fn drop(&mut self) {
     // Restore the `rooted state` of the inner value before the call to `borrow_mut`
     if !self.rooted.get() {
-      self._ref.unroot();
+      unsafe { self._ref.unroot(); }
     }
   }
 }
