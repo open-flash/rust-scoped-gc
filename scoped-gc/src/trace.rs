@@ -140,3 +140,12 @@ unsafe impl<K: Eq + ::std::hash::Hash + Trace, V: Trace> Trace for ::std::collec
     }
   });
 }
+
+unsafe impl<K: Eq + ::std::cmp::Ord + Trace, V: Trace> Trace for ::std::collections::BTreeMap<K, V> {
+  unsafe_custom_trace!(this, {
+    for (k, v) in this.iter() {
+      trace(k);
+      trace(v);
+    }
+  });
+}
