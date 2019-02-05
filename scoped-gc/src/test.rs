@@ -114,3 +114,18 @@ fn test_gc_tree() {
   root.borrow_mut().children.push(Gc::clone(&child2));
   child2.borrow_mut().parent = Some(Gc::clone(&root));
 }
+
+#[test]
+fn test_non_regression_pr3() {
+  // Both functions should compile.
+  {
+    fn _create_gc<'gc>(scope: &GcScope<'gc>) -> Gc<'gc, ()> {
+      scope.alloc(()).unwrap()
+    }
+  }
+  {
+    fn _create_gc<'gc>(scope: &'gc GcScope<'gc>) -> Gc<'gc, ()> {
+      scope.alloc(()).unwrap()
+    }
+  }
+}
