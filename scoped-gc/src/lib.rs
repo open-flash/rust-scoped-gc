@@ -1,4 +1,3 @@
-#![feature(generic_param_attrs)]
 #![feature(dropck_eyepatch)]
 
 /// This module lets you create garbage-collected scopes
