@@ -1,0 +1,14 @@
+language: rust
+os:
+  - linux
+rust:
+  - nightly
+
+script:
+  - (cd scoped-gc && cargo build)
+  - (cd scoped-gc && cargo test)
+  - (cd scoped-gc-derive && cargo build)
+  - (cd scoped-gc-derive && cargo test)
+
+notifications:
+  email: false
