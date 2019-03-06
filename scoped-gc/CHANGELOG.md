@@ -1,4 +1,4 @@
-# Next
+## 0.1.3 (2019-03-06)
 
 - **[Fix]** Fix lifetime elision error on `GcScope::alloc` ([#3](https://github.com/open-flash/rust-scoped-gc/pull/3))
 - **[Fix]** Remove `generic_param_attrs` feature, stable since Rust `1.27.0`.

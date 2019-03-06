@@ -1,6 +1,6 @@
 [package]
 name = "scoped-gc"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Charles Samborski <demurgos@demurgos.net>"]
 description = "Derive plugin for the `scoped-gc` crate"
 repository = "https://github.com/open-flash/rust-scoped-gc"
