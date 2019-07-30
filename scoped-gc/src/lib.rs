@@ -9,10 +9,10 @@
 ///   pub name: String,
 /// }
 ///
-/// impl Trace for NamedObject {
-///   fn trace(&self) {}
-///   fn root(&self) {}
-///   fn unroot(&self) {}
+/// unsafe impl Trace for NamedObject {
+///   unsafe fn mark(&self) {}
+///   unsafe fn root(&self) {}
+///   unsafe fn unroot(&self) {}
 /// }
 ///
 /// fn main() {
@@ -32,10 +32,10 @@
 ///   pub name: &'a str,
 /// }
 ///
-/// impl<'a> Trace for RefNamedObject<'a> {
-///   fn trace(&self) {}
-///   fn root(&self) {}
-///   fn unroot(&self) {}
+/// unsafe impl<'a> Trace for RefNamedObject<'a> {
+///   unsafe fn mark(&self) {}
+///   unsafe fn root(&self) {}
+///   unsafe fn unroot(&self) {}
 /// }
 ///
 /// fn main() {
@@ -45,6 +45,31 @@
 ///     let hello_world: String = String::from("Hello, World!");
 ///     message = scope.alloc(RefNamedObject { name: &hello_world }).unwrap();
 ///   }
+/// }
+/// ```
+///
+/// ```compile_fail
+/// // Check that the drop order between the GC scope and values is enforced.
+///
+/// use scoped_gc::{Gc, GcScope, Trace};
+///
+/// pub struct NamedObject {
+///   pub name: String,
+/// }
+///
+/// unsafe impl Trace for NamedObject {
+///   unsafe fn mark(&self) {}
+///   unsafe fn root(&self) {}
+///   unsafe fn unroot(&self) {}
+/// }
+///
+/// fn main() {
+///   let mut stack: Vec<Gc<NamedObject>> = Vec::new();
+///   let scope: GcScope = GcScope::new();
+///   stack.push(scope.alloc(NamedObject { name: String::from("Hello, World!") }).unwrap())
+///   // `scope` is dropped first and frees the `NamedObject`
+///   // `stack` is dropped second, but it contains a `Gc`!
+///   // It will try to decrement the root count of an already freed value
 /// }
 /// ```
 

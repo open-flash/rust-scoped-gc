@@ -22,7 +22,7 @@ impl<'gc> GcScope<'gc> {
   }
 
   /// Allocates `value` in this garbage-collected scope and returns a `Gc` smart pointer to it.
-  pub fn alloc<T: Trace + 'gc>(&self, value: T) -> Result<Gc<'gc, T>, GcAllocErr> {
+  pub fn alloc<T: Trace + 'gc>(&'gc self, value: T) -> Result<Gc<'gc, T>, GcAllocErr> {
     unsafe { value.unroot() }
     self.state.borrow_mut()
       .alloc(value)
