@@ -1,4 +1,4 @@
-## Next
+## 0.1.4 (2019-07-30)
 
 - **[Fix]** **Fix use-after-free** caused by invalid lifetime constraint.
 
