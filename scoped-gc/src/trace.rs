@@ -103,6 +103,13 @@ macro_rules! unsafe_custom_trace {
   }
 }
 
+unsafe impl<T: Trace> Trace for ::std::ops::Range<T> {
+  unsafe_custom_trace!(this, {
+    trace(&this.start);
+    trace(&this.end);
+  });
+}
+
 unsafe impl<T: Trace> Trace for Box<T> {
   unsafe_custom_trace!(this, {
     trace(&**this)
