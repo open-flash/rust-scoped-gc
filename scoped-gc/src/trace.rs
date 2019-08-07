@@ -156,3 +156,12 @@ unsafe impl<K: Eq + ::std::cmp::Ord + Trace, V: Trace> Trace for ::std::collecti
     }
   });
 }
+
+unsafe impl<'a> Trace for &'a str {
+  #[inline]
+  unsafe fn mark(&self) {}
+  #[inline]
+  unsafe fn root(&self) {}
+  #[inline]
+  unsafe fn unroot(&self) {}
+}
