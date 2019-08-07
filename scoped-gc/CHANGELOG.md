@@ -1,4 +1,4 @@
-## Next
+## 0.1.5 (2019-08-07)
 
 - **[Feature]** Implement `Trace` for `::std::ops::Range`.
 - **[Feature]** Implement `Trace` for `str` and `&str`.

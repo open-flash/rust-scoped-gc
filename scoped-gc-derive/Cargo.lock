@@ -18,7 +18,7 @@ dependencies = [
 
 [[package]]
 name = "scoped-gc-derive"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "proc-macro2 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",

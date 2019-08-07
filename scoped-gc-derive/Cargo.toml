@@ -1,6 +1,6 @@
 [package]
 name = "scoped-gc-derive"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["Charles Samborski <demurgos@demurgos.net>"]
 description = "Scoped garbage collection for Rust"
 repository = "https://github.com/open-flash/rust-scoped-gc"
