@@ -18,7 +18,7 @@ pub(crate) struct GcBox<'gc, T: Trace + ? Sized + 'gc> {
   pub(crate) marked: Cell<bool>,
 
   /// A fat pointer (trait object) to the next `GcBox` if any.
-  pub(crate) next: Option<NonNull<GcBox<'gc, Trace>>>,
+  pub(crate) next: Option<NonNull<GcBox<'gc, dyn Trace>>>,
 
   /// The value the user allocated.
   pub(crate) value: T,

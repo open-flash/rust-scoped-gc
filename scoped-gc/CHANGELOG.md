@@ -2,6 +2,7 @@
 
 - **[Feature]** Implement `Trace` for `::std::ops::Range`.
 - **[Feature]** Implement `Trace` for `str` and `&str`.
+- **[Fix]** Add explicit `dyn` to trait objects.
 
 ## 0.1.4 (2019-07-30)
 

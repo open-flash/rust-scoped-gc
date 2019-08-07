@@ -39,7 +39,7 @@ struct GcState<'gc> {
   pub(crate) allocated_bytes: usize,
   //  threshold: usize,
   // Linked-list of boxes
-  pub(crate) boxes: Option<NonNull<GcBox<'gc, Trace>>>,
+  pub(crate) boxes: Option<NonNull<GcBox<'gc, dyn Trace>>>,
 }
 
 impl<'gc> GcState<'gc> {
@@ -71,7 +71,7 @@ impl<'gc> GcState<'gc> {
       // Mark
       let mut next_gc_box_ptr = self.boxes;
       while let Some(gc_box_ptr) = next_gc_box_ptr {
-        let gc_box: &GcBox<Trace> = unsafe { gc_box_ptr.as_ref() };
+        let gc_box: &GcBox<dyn Trace> = unsafe { gc_box_ptr.as_ref() };
         if gc_box.roots.get() > 0 {
           gc_box.mark_box();
         }
@@ -79,7 +79,7 @@ impl<'gc> GcState<'gc> {
       }
     }
 
-    let mut unmarked: Vec<*mut GcBox<Trace>> = Vec::new();
+    let mut unmarked: Vec<*mut GcBox<dyn Trace>> = Vec::new();
     unsafe {
       // Collect
       let mut next_gc_box_ptr_ref = &mut self.boxes;
